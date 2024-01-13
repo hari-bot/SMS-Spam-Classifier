@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SMS Spam Classifier</title>    
+</head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+<body>
+    <header id="heading"><h2><i class="bi bi-envelope-check" style="font-size: 30px;"></i><span class="white">  SPAM</span> CLASSIFIER</h2></header>
+   <div class="section-top">
+         <div class="input-form">
+            <h2 class="label">Enter Your Message</h2>
+            <form method="POST" action="/">
+                <!-- <label class="label" for="user_input">Enter Your Message</label><br> -->
+                <div class="input-wrap">
+                    <textarea  class='input' type="text" name="user_input" id="user_input" placeholder="Enter Your Message here" required></textarea>
+                </div><br>
+                <input class="check" type="submit" value="Check">
+            </form>
+    </div>
+    <div  class="about">
+        <p>"Say no to SMS spam! Our classifier filters out unwanted messages, keeping your inbox clean and hassle-free. Try it now!</p>
+    </div>
+
+   </div>
+   <div class="section-mid" style="position: relative; top: 0px;">
+            {% if result=='This SMS is not spam.' %}
+                <p class="not-spam"><i class="bi bi-check-circle"></i> {{ result }}</p>
+            {% elif result=='This SMS is a spam.' %}
+                <p class="spam"><i class="bi bi-exclamation-circle"></i> {{ result }}</p>
+            {% endif %}
+   </div>
+
+   <div class="section-mid-inbox">
+     <div class="inbox">
+        <div class="inbox-header">Inbox</div>
+            {% for message in messages %}
+                <div class="inbox-message">
+                        {% if message.type=='This SMS is not spam.' %}
+                        <p class="not-spam"><i class="bi bi-check-circle"></i></p>
+                        {% elif message.type=='This SMS is a spam.' %}
+                        <div class="spam"><i class="bi bi-exclamation-circle"></i></div>
+                        {% endif %}
+                        <!-- <div class="message-result">{{message.type}}</div> -->
+                        <div class="message-content">{{message.message}}</div>
+                        <form method="POST" action="/delete">
+                            <input type="hidden" name="task_index" value="{{ loop.index - 1 }}">
+                            <button class="delete" type="submit">Delete</button>
+                        </form>
+                </div>
+            {% endfor %}
+     </div>
+   </div>
+   
+
+</body>
+</html>
